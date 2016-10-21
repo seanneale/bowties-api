@@ -75,7 +75,7 @@ function modalGenerate(bowtieObject){
 								"<div class='modal-footer'>" +
 									"<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>" +
 									"<button type='button' class='btn btn-primary' id='launchEditModal' data-id="+bowtieObject.id+">Make changes</button>" +
-									"<button type='button' class='btn btn-primary hide' id='saveChanges' data-id="+bowtieObject.id+">Save changes</button>" +
+									"<button type='button' class='btn btn-primary hide' id='saveChanges' data-dismiss='modal' data-id="+bowtieObject.id+">Save changes</button>" +
 								"</div>" +
 							"</div>" +
 						"</div>" +
@@ -97,6 +97,22 @@ function addBowtieEditEventListener(){
 	$('#saveChanges').click(function(event){
 		console.log(event.currentTarget.dataset.id);
 		//function to compile a new object and send it back
+		var updatedBowtie = {
+			id: event.currentTarget.dataset.id,
+			material: $('#inputMaterial').val(),
+			pattern: $('#inputPattern').val(),
+			style: $('#inputStyle').val(),
+			wholesale_price: $('#inputWholesalePrice').val(),
+			retail_price: $('#inputRetailPrice').val(),
+			image_url: $('#inputImageUrl').val()
+		}
+		$.ajax({
+			method: 'PUT',
+			url: '/api/bowties/' + event.currentTarget.dataset.id,
+			data: updatedBowtie
+		}).done(function(){
+			window.location.href = '/bowties'
+		})
 	})
 }
 
