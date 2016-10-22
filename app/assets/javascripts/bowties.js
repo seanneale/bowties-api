@@ -73,6 +73,7 @@ function modalGenerate(bowtieObject){
 								"</div>" +
 								"<div class='modal-footer'>" +
 									"<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>" +
+									"<button type='button' class='btn btn-primary' id='deleteBowtie' data-dismiss='modal' data-id="+bowtieObject.id+">Delete Bowtie</button>" +
 									"<button type='button' class='btn btn-primary' id='launchEditModal' data-id="+bowtieObject.id+">Make changes</button>" +
 									"<button type='button' class='btn btn-primary hide' id='saveChanges' data-dismiss='modal' data-id="+bowtieObject.id+">Save changes</button>" +
 								"</div>" +
@@ -86,12 +87,14 @@ function modalGenerate(bowtieObject){
 }
 
 function addBowtieEditEventListener(){
+
 	$('#launchEditModal').click(function(){
 		$('#view').addClass('hide');
 		$('#edit').removeClass('hide');
 		$('#launchEditModal').addClass('hide');
 		$('#saveChanges').removeClass('hide');
 	})
+
 	$('#saveChanges').click(function(event){
 		//function to compile a new object and send it back
 		var updatedBowtie = {
@@ -103,11 +106,19 @@ function addBowtieEditEventListener(){
 			retail_price: parseFloat($('#inputRetailPrice').val()),
 			image_url: $('#inputImageUrl').val()
 		}
-		console.log(updatedBowtie);
 		$.ajax({
 			method: 'PATCH',
 			url: '/api/bowties/' + event.currentTarget.dataset.id,
 			data: updatedBowtie
+		}).done(function(){
+			window.location.href = '/bowties'
+		})
+	})
+
+	$('#deleteBowtie').click(function(event){
+		$.ajax({
+			method: 'DELETE',
+			url: '/api/bowties/' + event.currentTarget.dataset.id
 		}).done(function(){
 			window.location.href = '/bowties'
 		})
