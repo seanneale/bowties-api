@@ -123,7 +123,84 @@ function buildBowtieList(array){
 	addBowtieEventListener();
 }
 
+function generateModalForNewBowtie(){
+	console.log('new');
+	$('#modalDisplay').empty();
+	var newElem = 	"<div class='modal fade' id=newModal>" +
+						"<div class='modal-dialog' role='document'>" +
+							"<div class='modal-content'>" +
+      							"<div class='modal-header'>" +
+        							"<button type='button' class='close' data-dismiss='modal' aria-label='Close'>" +
+          								"<span aria-hidden='true'>&times;</span>" +
+									"</button>" +
+        							"<h4 class='modal-title'>New Bowtie Details</h4>" +
+ 							    "</div>" +
+								"<div class='modal-body'>" +
+									"<div id='new'>" +
+										"<div class='form-group'>" +
+											"<label for='inputMaterial'>Material</label>" +
+											"<input type='text' class='form-control' id='inputMaterial'>" +
+										"</div>" +
+										"<div class='form-group'>" +
+											"<label for='inputPattern'>Pattern</label>" +
+											"<input type='text' class='form-control' id='inputPattern'>" +
+										"</div>" +
+										"<div class='form-group'>" +
+											"<label for='inputStyle'>Style</label>" +
+											"<input type='text' class='form-control' id='inputStyle'>" +
+										"</div>" +
+										"<div class='form-group'>" +
+											"<label for='inputWholesalePrice'>Wholesale Price</label>" +
+											"<input type='number' class='form-control' id='inputWholesalePrice'>" +
+										"</div>" +
+										"<div class='form-group'>" +
+											"<label for='inputRetailPrice'>Retail Price</label>" +
+											"<input type='number' class='form-control' id='inputRetailPrice'>" +
+										"</div>" +
+										"<div class='form-group'>" +
+											"<label for='inputImageUrl'>Image URL</label>" +
+											"<input type='text' class='form-control' id='inputImageUrl'>" +
+										"</div>" +
+									"</div>" +
+								"</div>" +
+								"<div class='modal-footer'>" +
+									"<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>" +
+									"<button type='button' class='btn btn-primary' id='createNewBowtieBtn' data-dismiss='modal'>Create New Bowtie</button>" +
+								"</div>" +
+							"</div>" +
+						"</div>" +
+					"</div>";
+	$('#modalDisplay').append(newElem);
+	$('#newModal').modal('show')
+	addNewBowtieEventListener();
+}
+
+function addNewBowtieEventListener(){
+	$('#createNewBowtieBtn').click(function(){
+		var newBowtie = {
+			// id: event.currentTarget.dataset.id,
+			material: $('#inputMaterial').val(),
+			pattern: $('#inputPattern').val(),
+			style: $('#inputStyle').val(),
+			wholesale_price: parseFloat($('#inputWholesalePrice').val()),
+			retail_price: parseFloat($('#inputRetailPrice').val()),
+			image_url: $('#inputImageUrl').val()
+		}
+		$.ajax({
+			method: 'POST',
+			url: '/api/bowties/',
+			data: newBowtie
+		}).done(function(){
+			window.location.href = '/bowties'
+		})
+	})
+}
+
 $(document).ready(function(){
 	//function to read the json and build the list of bowties
 	getAllBowties();
+	//event listener to launch 'new' modal function
+	$('#newBowtieButton').click(function(){
+		generateModalForNewBowtie();
+	})
 })

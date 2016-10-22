@@ -1,10 +1,11 @@
 module API
 	class BowtiesController < ApplicationController
+		# ask denis about this on monday
 		skip_before_action 	:verify_authenticity_token
 		before_action 		:set_bowtie, only: [ :update, :destroy]
 
 		def index
-			render json: Bowtie.all
+			render json: Bowtie.all.order(:id)
 		end
 
 		def show
