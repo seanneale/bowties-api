@@ -11,11 +11,19 @@ module API
 		def show
 			render json: Bowtie.find_by(id: params[:id])
 		end
+
+		def create
+			@bowtie = Bowtie.new(material: params[:material], pattern: params[:pattern], style: params[:style], image_url: params[:image_url], wholesale_price: params[:wholesale_price], retail_price: params[:retail_price])
+			if @bowtie.save
+				puts 'created'
+			else
+				flash[:recipe] = @bowtie
+				flash[:errors] = @bowtie.errors.messages
+			end
+		end
 		
 		def update
-			# puts bowtie_params
 			@bowtie.assign_attributes(material: params[:material], pattern: params[:pattern], style: params[:style], image_url: params[:image_url], wholesale_price: params[:wholesale_price], retail_price: params[:retail_price])
-			puts @bowtie.id
 			if @bowtie.save
 				puts 'Saved!'
 			else
@@ -35,7 +43,6 @@ module API
 	# ActionController::ParameterMissing (param is missing or the value is empty: bowtie)
 	# solution was just to pass the params directly
 		def bowtie_params
-			params.require(:bowtie).permit(:material)
 			# params.require(:bowtie).permit(:material, :pattern, :style, :image_url, :wholesale_price, :retail_price)
 		end
 
