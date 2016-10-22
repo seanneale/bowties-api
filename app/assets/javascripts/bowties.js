@@ -9,7 +9,6 @@ function getAllBowties(){
 
 
 function getOneBowtie(id){
-	console.log(id);
 	$.ajax({
 		method: 'GET',
 		url: '/api/bowties/' + id
@@ -82,7 +81,6 @@ function modalGenerate(bowtieObject){
 					"</div>";
 	$('#modalDisplay').append(newElem);
 	var target = '#modal_'+bowtieObject.id;
-	console.log(target)
 	$(target).modal('show')
 	addBowtieEditEventListener();
 }
@@ -95,19 +93,19 @@ function addBowtieEditEventListener(){
 		$('#saveChanges').removeClass('hide');
 	})
 	$('#saveChanges').click(function(event){
-		console.log(event.currentTarget.dataset.id);
 		//function to compile a new object and send it back
 		var updatedBowtie = {
-			id: event.currentTarget.dataset.id,
+			// id: event.currentTarget.dataset.id,
 			material: $('#inputMaterial').val(),
 			pattern: $('#inputPattern').val(),
 			style: $('#inputStyle').val(),
-			wholesale_price: $('#inputWholesalePrice').val(),
-			retail_price: $('#inputRetailPrice').val(),
+			wholesale_price: parseFloat($('#inputWholesalePrice').val()),
+			retail_price: parseFloat($('#inputRetailPrice').val()),
 			image_url: $('#inputImageUrl').val()
 		}
+		console.log(updatedBowtie);
 		$.ajax({
-			method: 'PUT',
+			method: 'PATCH',
 			url: '/api/bowties/' + event.currentTarget.dataset.id,
 			data: updatedBowtie
 		}).done(function(){
