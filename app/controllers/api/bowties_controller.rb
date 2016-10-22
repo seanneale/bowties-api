@@ -32,6 +32,14 @@ module API
 			end
 		end
 
+		def destroy
+			if @bowtie.destroy
+				puts 'deleted'
+			else
+				@message = 'cannot find bowtie'
+			end
+		end
+
 	protected
 		def set_bowtie
 			@bowtie = Bowtie.find_by(id: params[:id])
